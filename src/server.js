@@ -8,7 +8,6 @@ const AlbumService = require('./services/postgres/AlbumsService');
 const { AlbumValidator } = require('./validator/albums');
 const { SongsValidator } = require ('./validator/songs')
 const ClientError = require('../src/exceptions/ClientError');
-const NotFoundError = require('../src/exceptions/NotFoundError');
 
 const init  = async () => {
     const albumService = new AlbumService();
@@ -42,9 +41,42 @@ const init  = async () => {
         },
     ]);
 
+    server.ext('onPreResponse',(request, h)=>{
+        const {response} = request;
+
+        if (response instanceof Error){
+            if (response instanceof ClientError){
+                const newResponse = h.response({
+                    status: 'fail',
+                    message: response.message,
+                });
+                newResponse.code(response.statusCode);
+                return newResponse;
+            }
+            
+        if (!response.isServer){
+            const newResponse =  h.response({
+                status: 'fail',
+                message: response.message
+            });
+            newResponse.code(response.statusCode)
+            return newResponse;
+        }
+        const newResponse = h.response({
+            status:'error',
+            message: 'terjadi kegagalan pada server kami',
+        });
+        newResponse.code(500);
+        return newResponse;
+
+        }
+        return h.continue
+    });
+    
+
     await server.start();
     console.log(`Server berjalan pada ${server.info.uri}`)
-}
+};
 
 
-init()
+init();
