@@ -8,7 +8,7 @@ class AlbumHandler{
         autoBind(this)
     }
 
-    async postAlbumsHandler(request, h){
+    async postAlbumHandler(request, h){
         const albumValidated = this._validator.validateAlbumPayload(request.payload);   
         const albumId = await this._service.addAlbum(albumValidated);
 
@@ -16,7 +16,7 @@ class AlbumHandler{
         const response = h.response({
             status: 'success',
             data: {
-                albumId,
+                albumId: albumId,
             },
         });
         response.code(201);
@@ -25,7 +25,7 @@ class AlbumHandler{
 
     async getAlbumByIdHandler(request, h){
         const { id } = request.params;
-        const album = await this._service.getAlbumId(id);
+        const album = await this._service.getAlbumById(id);
 
         const resultAlbum = mapDBToAlbumSongService(album.album, album.songs)
 

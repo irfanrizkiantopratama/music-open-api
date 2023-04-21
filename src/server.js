@@ -5,8 +5,8 @@ const albums = require ('./api/albums');
 const songs = require ('./api/songs')
 const SongsService = require('./services/postgres/SongsService');
 const AlbumService = require('./services/postgres/AlbumsService');
-const { AlbumValidator } = require('./validator/albums');
-const { SongsValidator } = require ('./validator/songs')
+const  AlbumValidator = require('./validator/albums');
+const  SongsValidator  = require ('./validator/songs')
 const ClientError = require('../src/exceptions/ClientError');
 
 const init  = async () => {
@@ -41,10 +41,11 @@ const init  = async () => {
         },
     ]);
 
-    server.ext('onPreResponse',(request, h)=>{
+    server.ext('onPreResponse', (request, h) => {
         const {response} = request;
 
         if (response instanceof Error){
+
             if (response instanceof ClientError){
                 const newResponse = h.response({
                     status: 'fail',
@@ -53,24 +54,26 @@ const init  = async () => {
                 newResponse.code(response.statusCode);
                 return newResponse;
             }
-            
-        if (!response.isServer){
-            const newResponse =  h.response({
-                status: 'fail',
-                message: response.message
+
+            if (!response.isServer){
+                const newResponse = h.response({
+                    status: 'fail',
+                    message: response.message,
+                });
+                newResponse.code(response.statusCode);
+                return newResponse;
+            }
+
+            const newResponse = h.response({
+                status: 'error',
+                message: 'terjadi kegagalan pada server kami',
             });
-            newResponse.code(response.statusCode)
+
+            newResponse.code(500);
             return newResponse;
         }
-        const newResponse = h.response({
-            status:'error',
-            message: 'terjadi kegagalan pada server kami',
-        });
-        newResponse.code(500);
-        return newResponse;
 
-        }
-        return h.continue
+        return h.continue;
     });
     
 

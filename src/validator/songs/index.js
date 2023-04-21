@@ -12,4 +12,4 @@ class SongsValidator {
     };
 };
 
-module.exports =  { SongsValidator }
+module.exports =   SongsValidator ;

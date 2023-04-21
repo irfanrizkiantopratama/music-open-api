@@ -13,7 +13,7 @@ const mapDBToModel = ({
     performer,
     genre,
     duration,
-    albumId : album_id
+    albumId : album_id,
 });
 
 const mapDBToAlbumSongService = ({

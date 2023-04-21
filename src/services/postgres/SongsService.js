@@ -17,6 +17,7 @@ class SongsService {
             text: 'INSERT INTO songs VALUES($1, $2 ,$3 ,$4 , $5, $6, $7, $8, $9) RETURNING id',
             values : [id, title, year, performer, genre, duration, albumId, createdAt, updatedAt],
         };
+        
         const result = await this._pool.query(query);
         if (!result.rows[0].id){
             throw new InvariantError ('song failed to add');
@@ -34,6 +35,7 @@ class SongsService {
             text: 'SELECT * FROM songs WHERE id = $1',
             values: [id],
         };
+
         const result = await this._pool.query(query);
         if (!result.rows.length){
             throw new NotFoundError('Song not found');
@@ -47,8 +49,8 @@ class SongsService {
             text: 'UPDATE songs SET title = $1, year = $2, performer =$3, genre = $4, duration = $5, album_id = $6, updated_at = $7 WHERE id = $8 RETURNING id',
             values: [title, year, performer, genre, duration, albumId, updatedAt, id],
         };
-        const result  =  await this._pool.query(query);
 
+        const result  =  await this._pool.query(query);
         if (!result.rows.length){
             throw new NotFoundError('Failed to update songs. ID not found')
         }
@@ -58,8 +60,8 @@ class SongsService {
             text: 'DELETE FROM songs WHERE id = $1 RETURNING id',
             values: [id]
         };
-        const result = await this._pool.query(query);
 
+        const result = await this._pool.query(query);
         if (!result.rows.length){
             throw new NotFoundError('song failed to delete. ID not found')
         }
