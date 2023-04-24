@@ -3,11 +3,11 @@
 exports.up = pgm => {
     pgm.createTable('songs',{
         id: {
-            type: 'VARCHAR(30)',
+            type: 'VARCHAR(50)',
             primaryKey: true,
         },
         title: {
-            type: 'VARCHAR(30)',
+            type: 'text',
             notNull: true,
         },
         year: {
@@ -15,19 +15,15 @@ exports.up = pgm => {
             notNull: true,
         },
         performer: {
-            type: 'VARCHAR(30)',
+            type: 'text',
             notNull: true,
         },
         genre: {
-            type: 'VARCHAR(30)',
+            type: 'text',
             notNull: true,
         },
         duration: {
             type: 'INTEGER',
-        },
-        album_id: {
-            type: 'VARCHAR(30)',
-            references: '"albums"',
         },
         created_at: {
             type: 'TEXT',
