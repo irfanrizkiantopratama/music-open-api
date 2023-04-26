@@ -3,7 +3,7 @@ const { Pool } = require ('pg');
 const NotFoundError =  require ('../../exceptions/NotFoundError');
 const InvariantError = require ('../../exceptions/InvariantError');
 
-class albumService {
+class AlbumService {
     constructor(){
         this._pool = new Pool();
     }
@@ -23,6 +23,7 @@ class albumService {
         }
         return result.rows[0].id;
     }
+    
     async getAlbumById(id){
         const queryAlbum = {
             text: 'SELECT id, name, year FROM albums WHERE id = $1',
@@ -41,6 +42,7 @@ class albumService {
         const resultSong = await this._pool.query(querySong);
         return { album: resultAlbum.rows[0], songs: resultSong.rows};
     }
+    
     async editAlbumId(id, {name, year}){
         const updatedAt = new Date().toISOString();
 
@@ -58,4 +60,4 @@ class albumService {
 
 }
 
-module.exports = albumService;
+module.exports = AlbumService;
