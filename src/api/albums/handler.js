@@ -1,5 +1,5 @@
 const { errorHandler } = require('../../utils');
-const {mapDBToModel,mapDBToAlbumSongService} = require('../../utils');
+// const {mapDBToModel,mapDBToAlbumSongService} = require('../../utils');
 
 class AlbumHandler{
     constructor (service , validator){
@@ -8,6 +8,7 @@ class AlbumHandler{
         
         this.postAlbumHandler = this.postAlbumHandler.bind(this);
         this.getAlbumByIdHandler = this.getAlbumByIdHandler.bind(this);
+        this.putAlbumByIdHandler = this.putAlbumByIdHandler.bind(this);
     }
 
     async postAlbumHandler(request, h){
@@ -46,16 +47,21 @@ class AlbumHandler{
        
     }
     
-    async editAlbumHandler(request, h){
-        const albumValidated = this._validator.validateAlbumPayload(request.payload);
-        const { id } = request.params;
-
-        await this._service.editAlbumId(id, albumValidated);
-        const response = h.response({
+    async putAlbumByIdHandler(request, h){
+       try {
+        this._validator.validateAlbumPayload(request.payload);
+        const { id } =  request.params
+        await this._service.editAlbumById(id, request.payload);
+        const response = h.response ({
             status: 'success',
-            message: 'Album successfully edited',
+            message: 'Album has been modified'
         });
-        return response
+        response.code(200);
+        return response;
+
+       } catch (error){
+        errorHandler(error,h)
+       }
     }
     async deleteAlbumHandler(request,h){
         const { id } = request.params;
