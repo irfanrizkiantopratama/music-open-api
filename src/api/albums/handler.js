@@ -7,7 +7,7 @@ class AlbumHandler{
         this._validator = validator;
         
         this.postAlbumHandler = this.postAlbumHandler.bind(this);
-        this.getAlbumByIdHandler = this.postAlbumHandler.bind(this);
+        this.getAlbumByIdHandler = this.getAlbumByIdHandler.bind(this);
     }
 
     async postAlbumHandler(request, h){
@@ -22,7 +22,6 @@ class AlbumHandler{
                 albumId
             }
         });
-        console.log(response.message);
         response.code(201);
         return response
 
@@ -32,22 +31,16 @@ class AlbumHandler{
     }
 
     async getAlbumByIdHandler(request, h) {
-        try{
-            const {id} = request.params;
-            const album = await this._service.getAlbumById(id);
-            console.log(album);
-            const resultMappingAlbum = mapDBToAlbumSongService(album.album, album.songs);
-            console.log(resultMappingAlbum);
-    
-            const response = h.response({
+        try {
+            const { id } = request.params;
+            const album = await this._service.getAlbumById(id)
+            return {
                 status: 'success',
-                data: {
-                    album: resultMappingAlbum,
-                },
-            });
-    
-            return response;
-        }catch(error){
+                data : {
+                    album
+                }
+            };
+        } catch (error){
             return errorHandler(error,h)
         }
        

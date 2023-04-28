@@ -33,6 +33,10 @@ exports.up = pgm => {
             type: 'TEXT',
             notNull: true,
         },
+        album_id: {
+            type: 'VARCHAR(40)',
+            notNull: false,
+        }
     })
 };
 

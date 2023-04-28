@@ -23,24 +23,27 @@ class AlbumService {
         }
         return result.rows[0].id;
     }
-    
+
     async getAlbumById(id){
-        const queryAlbum = {
-            text: 'SELECT id, name, year FROM albums WHERE id = $1',
-            values: [id],
-        };
-
-        const resultAlbum = await this._pool.query(queryAlbum);
-        if (!resultAlbum.rows.length){
-            throw new NotFoundError ('Album not found');
-        }
-
-        const querySong = {
-            text: 'SELECT songs.id, songs.title, songs.performer FROM albums JOIN songs ON albums.id = songs.album_id WHERE albums.id = $1',
-            values: [id],
-        };
-        const resultSong = await this._pool.query(querySong);
-        return { album: resultAlbum.rows[0], songs: resultSong.rows};
+        const query = {
+            text: 'SELECT * FROM albums WHERE id = $1',
+            values: [id]
+          }
+          const querySongs = {
+            text: 'SELECT * FROM songs WHERE album_id = $1',
+            values: [id]
+          }
+          const result = await this._pool.query(query)
+          const { rows } = await this._pool.query(querySongs)
+          if (!result.rows.length) {
+            throw new NotFoundError('There is no such file with this ID')
+          }
+          const reduceSongDetail = rows.map(({ id, title, performer }) => ({ id, title, performer }))
+          const response = {
+            ...result.rows[0],
+            songs: reduceSongDetail
+          }
+          return response
     }
     
     async editAlbumId(id, {name, year}){
