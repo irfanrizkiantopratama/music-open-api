@@ -24,6 +24,7 @@ exports.up = pgm => {
         },
         duration: {
             type: 'INTEGER',
+            notNull: true
         },
         created_at: {
             type: 'TEXT',

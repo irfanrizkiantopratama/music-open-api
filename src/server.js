@@ -24,18 +24,22 @@ const init = async () => {
         },
     });
 
-    await server.register({
-        plugin: songs,
-        options: {
-            service: songsService,
-            validator: SongsValidator,
+    await server.register([
+        {
+            plugin: songs,
+            options: {
+                service: songsService,
+                validator: SongsValidator,
+            },
         },
-        plugin: albums,
-        options: {
-            service: albumService,
-            validator: AlbumValidator,
-        },
-    });
+        {
+            plugin: albums,
+            options: {
+                service: albumService,
+                validator: AlbumValidator,
+            },
+        }
+    ]);
 
     await server.start();
     console.log(`Server berjalan pada ${server.info.uri}`);
