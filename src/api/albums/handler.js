@@ -16,7 +16,6 @@ class AlbumHandler{
     async postAlbumHandler(request, h){
        try{
         this._validator.validateAlbumPayload(request.payload);
-        const {name, year} = request.payload;
         const albumId =  await this._service.addAlbum({ name, year});
         const response = h.response ({
             status: 'success',
@@ -54,12 +53,10 @@ class AlbumHandler{
         this._validator.validateAlbumPayload(request.payload);
         const { id } =  request.params
         await this._service.editAlbumId(id, request.payload);
-        const response = h.response ({
+       return {
             status: 'success',
             message: 'Album has been modified'
-        });
-        response.code(200);
-        return response;
+       }
 
        } catch (error){
             return errorHandler(error,h)
@@ -69,12 +66,10 @@ class AlbumHandler{
         try{
             const { id } = request.params
             await this._service.deleteAlbumId(id);
-            const response = h.response ({
+            return {
                 status: 'success',
                 message: 'Album has been deleted'
-            });
-            response.code(200);
-            return response;
+            }
         }catch(error){
             return errorHandler (error,h)
         }
