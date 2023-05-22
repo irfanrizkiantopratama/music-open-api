@@ -1,5 +1,3 @@
-module.exports = AuthenticationsHandler;
-
 const routes = (handler) => [
     {
       method: 'POST',

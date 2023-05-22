@@ -1,6 +1,6 @@
 const { errorHandler } = require('../../utils');
 
-class AuthenticationsHandler {
+class Authenticationshandler {
     constructor(authenticationsService, usersService, tokenManager, validator) {
         this._authenticationsService = authenticationsService;
         this._usersService = usersService;
@@ -88,4 +88,4 @@ class AuthenticationsHandler {
     }
 }
 
-module.exports = AuthenticationsHandler;
+module.exports = Authenticationshandler;
